@@ -16,20 +16,29 @@ type DataSubject struct {
 
 // TODO: The ChangeItem function will cause the Listeners to be called
 func (ds *DataSubject) ChangeItem(data string) {
-
+	ds.field = data
+	ds.notifyAll()
 }
 
 // TODO: This function adds an observer to the list
 func (ds *DataSubject) registerObserver(o DataListener) {
-
+	ds.observers = append(ds.observers, o)
 }
 
 // TODO: This function removes an observer from the list
 func (ds *DataSubject) unregisterObserver(o DataListener) {
-
+	var newobs []DataListener
+	for _, obs := range ds.observers {
+		if o.Name != obs.Name {
+			newobs = append(newobs, obs)
+		}
+	}
+	ds.observers = newobs
 }
 
 // TODO: The notifyAll function calls all the listeners with the changed data
 func (ds *DataSubject) notifyAll() {
-
+	for _, obs := range ds.observers {
+		obs.onUpdate(ds.field)
+	}
 }
